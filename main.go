@@ -8,21 +8,15 @@ import (
 )
 
 type AwsDocModel struct {
-	services map[int]string // available aws services to get help
-	service  int            // selected aws service
-	prompt   string         // prompt for aws doc
+	services []string         // available aws services to get help
+	cursor   int              // current cursor position
+	selected map[int]struct{} // selected aws service
 }
 
 func InitialAwsDocModel() AwsDocModel {
 	return AwsDocModel{
-		services: map[int]string{
-			1: "s3",
-			2: "lambda",
-			3: "dynamoDb",
-			4: "ec2",
-		},
-		service: 1,
-		prompt:  "",
+		services: []string{"DynamoDB", "Lambda", "S3", "EC2"},
+		selected: make(map[int]struct{}),
 	}
 }
 
@@ -37,15 +31,20 @@ func (adm AwsDocModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		case "ctrl+c", "q":
 			return adm, tea.Quit
 		case "down", "j":
-			if adm.service < len(adm.services)-1 {
-				adm.service++
+			if adm.cursor < len(adm.services)-1 {
+				adm.cursor++
 			}
 		case "up", "k":
-			if adm.service > 1 {
-				adm.service--
+			if adm.cursor > 0 {
+				adm.cursor--
 			}
 		case "enter":
-			adm.prompt = adm.services[adm.service]
+			_, ok := adm.selected[adm.cursor]
+			if ok {
+				delete(adm.selected, adm.cursor)
+			} else {
+				adm.selected[adm.cursor] = struct{}{}
+			}
 		}
 	}
 
@@ -57,11 +56,16 @@ func (adm AwsDocModel) View() string {
 
 	for i, service := range adm.services {
 		cursor := " "
-		if adm.service == i {
+		if adm.cursor == i {
 			cursor = ">"
 		}
 
-		s += fmt.Sprintf("%s [%s]\n", cursor, service)
+		checked := " "
+		if _, ok := adm.selected[i]; ok {
+			checked = "x"
+		}
+
+		s += fmt.Sprintf("%s [%s] %s\n", cursor, checked, service)
 	}
 
 	s += "\npress q to quit.\n"
