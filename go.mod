@@ -1,4 +1,4 @@
-module github.com/luka2220/aws-doc-agent-cli
+module doc-whisperer/aws-doc-agent-cli
 
 go 1.24.1
 
