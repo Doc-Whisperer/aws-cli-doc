@@ -1,1 +1,4 @@
-
+- [] Find out if bubbletea has a component for list rendering
+- [] Style the services list
+- [] Persist the selected service for later use (in a json maybe...)
+- [] Render the next prompt component when service is selected and confirmed
