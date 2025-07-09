@@ -1,10 +1,9 @@
 ### TODO
 
-- [] Style the services list
-- [] Setup logging
-- [] Persist the selected service for later use (in a json maybe...)
-- [] Render the next prompt component when service is selected and confirmed
+- [ ] Style the services list
+- [ ] Setup logging
 
 ### Completed
 
-- [✅] Implement bubbles list component to display services list
+- ✅ Implement bubbles list component to display services list
+- ✅ Render the next prompt component when service is selected and confirmed

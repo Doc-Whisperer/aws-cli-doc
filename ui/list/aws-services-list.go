@@ -1,6 +1,8 @@
-package ui
+package list
 
 import (
+	"doc-whisperer/aws-doc-agent-cli/ui/prompt"
+
 	"github.com/charmbracelet/bubbles/list"
 	tea "github.com/charmbracelet/bubbletea"
 	"github.com/charmbracelet/lipgloss"
@@ -18,9 +20,6 @@ func (li ListItem) FilterValue() string { return li.title }
 
 type AwsDocModel struct {
 	servicesListComponent list.Model // bubbletea list component
-	services              []string   // available aws services to get help
-	cursor                int        // current cursor position
-	selected              int        // selected aws service
 }
 
 func (aws AwsDocModel) Init() tea.Cmd {
@@ -36,16 +35,10 @@ func (aws AwsDocModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		switch msg.String() {
 		case "ctrl+c", "q":
 			return aws, tea.Quit
-		case "down", "j":
-			if aws.cursor < len(aws.services)-1 {
-				aws.cursor++
-			}
-		case "up", "k":
-			if aws.cursor > 0 {
-				aws.cursor--
-			}
 		case "enter":
-			aws.selected = aws.cursor
+			service := aws.servicesListComponent.SelectedItem().FilterValue()
+			promptModel := prompt.RenderModel(service)
+			return promptModel, nil
 		}
 	}
 
