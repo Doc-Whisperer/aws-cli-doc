@@ -10,7 +10,7 @@ import (
 )
 
 func main() {
-	p := tea.NewProgram(ui.InitialAwsDocModel())
+	p := tea.NewProgram(ui.ServicesListModel(), tea.WithAltScreen())
 	if _, err := p.Run(); err != nil {
 		fmt.Printf("An error occurred: %f", err)
 		os.Exit(1)
