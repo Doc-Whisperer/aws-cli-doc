@@ -22,11 +22,11 @@ type AwsDocModel struct {
 	servicesListComponent list.Model // bubbletea list component
 }
 
-func (aws AwsDocModel) Init() tea.Cmd {
+func (aws *AwsDocModel) Init() tea.Cmd {
 	return nil
 }
 
-func (aws AwsDocModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
+func (aws *AwsDocModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	switch msg := msg.(type) {
 	case tea.WindowSizeMsg:
 		h, v := docStyle.GetFrameSize()
@@ -47,7 +47,7 @@ func (aws AwsDocModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	return aws, cmd
 }
 
-func (aws AwsDocModel) View() string {
+func (aws *AwsDocModel) View() string {
 	return docStyle.Render(aws.servicesListComponent.View())
 }
 
@@ -59,8 +59,10 @@ func ServicesListModel() tea.Model {
 		ListItem{title: "EC2", desc: "Documentation resources for aws EC2 api, configuration, and internals"},
 	}
 
-	m := AwsDocModel{servicesListComponent: list.New(l, list.NewDefaultDelegate(), 0, 0)}
-	m.servicesListComponent.Title = "Available AWS Documentation Resources"
+	delegate := StyledListDelegate()
+
+	m := &AwsDocModel{servicesListComponent: list.New(l, delegate, 0, 0)}
+	m.servicesListComponent.Title = mainTitleStyling.Render("AWS Services Documentation")
 
 	return m
 }
