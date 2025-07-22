@@ -8,7 +8,9 @@ type Props = {
 export default function App({name = 'Stranger'}: Props) {
 	return (
 		<Text>
-			Hello, <Text color="green">{name}</Text>
+			<Text color="blue">
+				Hello, <Text color="green">{name}</Text>
+			</Text>
 		</Text>
 	);
 }
